@@ -91,7 +91,103 @@
   }
 
   if (waitlistForm && feedback) {
-    waitlistForm.addEventListener('submit', (event) => {
+    const submitButton = waitlistForm.querySelector('button[type="submit"]');
+    const waitlistEndpoint =
+      waitlistForm.getAttribute('data-endpoint') || 'https://formsubmit.co/ajax/tri2maxapp@gmail.com';
+
+    const getConnectionData = () => {
+      const connection =
+        navigator.connection || navigator.mozConnection || navigator.webkitConnection || null;
+      if (!connection) return 'n/a';
+      const parts = [
+        connection.effectiveType || 'unknown',
+        `downlink:${connection.downlink ?? 'n/a'}`,
+        `rtt:${connection.rtt ?? 'n/a'}`,
+        `saveData:${connection.saveData ? 'on' : 'off'}`
+      ];
+      return parts.join(', ');
+    };
+
+    const getDeviceData = () => ({
+      userAgent: navigator.userAgent || 'n/a',
+      platform: navigator.platform || 'n/a',
+      language: navigator.language || 'n/a',
+      languages: Array.isArray(navigator.languages) ? navigator.languages.join(', ') : 'n/a',
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'n/a',
+      viewport: `${window.innerWidth}x${window.innerHeight}`,
+      screen: `${window.screen.width}x${window.screen.height}`,
+      colorDepth: String(window.screen.colorDepth ?? 'n/a'),
+      pixelRatio: String(window.devicePixelRatio ?? 'n/a'),
+      touchPoints: String(navigator.maxTouchPoints ?? 0),
+      cookiesEnabled: String(Boolean(navigator.cookieEnabled)),
+      doNotTrack: navigator.doNotTrack || 'n/a',
+      hardwareConcurrency: String(navigator.hardwareConcurrency ?? 'n/a'),
+      deviceMemory: String(navigator.deviceMemory ?? 'n/a'),
+      connection: getConnectionData(),
+      referrer: document.referrer || 'direct',
+      page: window.location.href
+    });
+
+    const getLocationData = async () => {
+      if (!('geolocation' in navigator)) {
+        return { status: 'unsupported' };
+      }
+
+      return new Promise((resolve) => {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const latitude = Number(position.coords.latitude).toFixed(6);
+            const longitude = Number(position.coords.longitude).toFixed(6);
+            let city = 'n/a';
+            let country = 'n/a';
+            let region = 'n/a';
+
+            try {
+              const reverse = await fetch(
+                `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`,
+                { method: 'GET' }
+              );
+
+              if (reverse.ok) {
+                const geo = await reverse.json();
+                city = geo.city || geo.locality || geo.principalSubdivision || 'n/a';
+                country = geo.countryName || 'n/a';
+                region = geo.principalSubdivision || 'n/a';
+              }
+            } catch (error) {
+              city = 'lookup-failed';
+              country = 'lookup-failed';
+              region = 'lookup-failed';
+            }
+
+            resolve({
+              status: 'granted',
+              latitude,
+              longitude,
+              accuracy: `${Math.round(position.coords.accuracy || 0)}m`,
+              city,
+              region,
+              country
+            });
+          },
+          (error) => {
+            const map = {
+              1: 'denied',
+              2: 'unavailable',
+              3: 'timeout'
+            };
+            resolve({ status: map[error.code] || 'failed' });
+          },
+          {
+            enableHighAccuracy: false,
+            timeout: 8000,
+            maximumAge: 300000
+          }
+        );
+      });
+    };
+
+    waitlistForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       const formData = new FormData(waitlistForm);
       const email = String(formData.get('email') || '').trim();
@@ -102,9 +198,62 @@
         return;
       }
 
-      feedback.textContent = 'Thanks. You are on the early-access list.';
-      feedback.style.color = 'var(--text-soft)';
-      waitlistForm.reset();
+      feedback.textContent = 'Sending request...';
+      feedback.style.color = 'var(--text-muted)';
+      if (submitButton instanceof HTMLButtonElement) submitButton.disabled = true;
+
+      try {
+        const [locationData, deviceData] = await Promise.all([getLocationData(), Promise.resolve(getDeviceData())]);
+        const timestamp = new Date().toISOString();
+
+        formData.set('email', email);
+        formData.append('submitted_at', timestamp);
+        formData.append('location_status', locationData.status || 'unknown');
+        formData.append('latitude', locationData.latitude || 'n/a');
+        formData.append('longitude', locationData.longitude || 'n/a');
+        formData.append('gps_accuracy', locationData.accuracy || 'n/a');
+        formData.append('city', locationData.city || 'n/a');
+        formData.append('region', locationData.region || 'n/a');
+        formData.append('country', locationData.country || 'n/a');
+        formData.append('device_user_agent', deviceData.userAgent);
+        formData.append('device_platform', deviceData.platform);
+        formData.append('device_language', deviceData.language);
+        formData.append('device_languages', deviceData.languages);
+        formData.append('device_timezone', deviceData.timezone);
+        formData.append('device_viewport', deviceData.viewport);
+        formData.append('device_screen', deviceData.screen);
+        formData.append('device_color_depth', deviceData.colorDepth);
+        formData.append('device_pixel_ratio', deviceData.pixelRatio);
+        formData.append('device_touch_points', deviceData.touchPoints);
+        formData.append('device_cookies_enabled', deviceData.cookiesEnabled);
+        formData.append('device_do_not_track', deviceData.doNotTrack);
+        formData.append('device_hardware_concurrency', deviceData.hardwareConcurrency);
+        formData.append('device_memory', deviceData.deviceMemory);
+        formData.append('device_connection', deviceData.connection);
+        formData.append('page', deviceData.page);
+        formData.append('referrer', deviceData.referrer);
+
+        const response = await fetch(waitlistEndpoint, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            Accept: 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Waitlist request failed with status ${response.status}`);
+        }
+
+        feedback.textContent = 'Thanks. Your waitlist request was sent.';
+        feedback.style.color = 'var(--text-soft)';
+        waitlistForm.reset();
+      } catch (error) {
+        feedback.textContent = 'Request failed. Please try again in a moment.';
+        feedback.style.color = 'var(--accent)';
+      } finally {
+        if (submitButton instanceof HTMLButtonElement) submitButton.disabled = false;
+      }
     });
   }
 
