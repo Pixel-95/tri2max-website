@@ -7,7 +7,6 @@
   const heroSteps = document.querySelectorAll('.hero-step, .hero-headline');
   const planButtons = Array.from(document.querySelectorAll('.plan-day'));
   const planDetail = document.querySelector('[data-plan-detail]');
-  const planList = document.querySelector('.plan-list');
   const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   const setHeaderState = () => {
@@ -128,15 +127,7 @@
     const detailTitle = planDetail.querySelector('.plan-detail-title');
     const detailMeta = planDetail.querySelector('.plan-detail-meta');
     const detailCopy = planDetail.querySelector('.plan-detail-copy');
-    const allowPlanInteraction = window.matchMedia('(min-width: 900px) and (hover: hover) and (pointer: fine)').matches;
-
-    if (!allowPlanInteraction) {
-      if (planList) planList.classList.add('is-static');
-      planButtons.forEach((button, index) => {
-        button.setAttribute('aria-disabled', 'true');
-        if (index > 0) button.setAttribute('tabindex', '-1');
-      });
-    }
+    const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
     const setActiveDay = (button) => {
       if (!(button instanceof HTMLButtonElement)) return;
@@ -160,18 +151,19 @@
       }, 130);
     };
 
-    if (allowPlanInteraction) {
-      planButtons.forEach((button) => {
-        button.addEventListener('click', () => setActiveDay(button));
-        button.addEventListener('mouseenter', () => setActiveDay(button));
+    planButtons.forEach((button) => {
+      button.addEventListener('click', () => setActiveDay(button));
 
-        button.addEventListener('keydown', (event) => {
-          if (event.key !== 'Enter' && event.key !== ' ') return;
-          event.preventDefault();
-          setActiveDay(button);
-        });
+      if (hasFinePointer) {
+        button.addEventListener('mouseenter', () => setActiveDay(button));
+      }
+
+      button.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        setActiveDay(button);
       });
-    }
+    });
   }
 
   const year = document.querySelector('#year');
