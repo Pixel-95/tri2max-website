@@ -27,11 +27,13 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
   font-family: var(--font-sans);
   color: var(--text);
   background:
@@ -108,10 +110,10 @@ a {
   top: 0;
   left: 0;
   right: 0;
-  width: 100vw;
-  max-width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
   z-index: 40;
   border-bottom: 1px solid var(--line-soft);
   backdrop-filter: none;
@@ -122,43 +124,6 @@ a {
 .site-header.is-scrolled {
   border-bottom-color: var(--line-soft);
   background: #0b0d12;
-}
-
-.quiet-signal {
-  position: fixed;
-  top: calc(5.2rem + env(safe-area-inset-top, 0px));
-  right: calc(1rem + env(safe-area-inset-right, 0px));
-  z-index: 32;
-  pointer-events: none;
-  display: grid;
-  gap: 0.18rem;
-  min-width: 8.5rem;
-  padding: 0.46rem 0.64rem;
-  border-radius: 11px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(11, 13, 18, 0.64);
-  backdrop-filter: blur(6px);
-  font-size: 0.72rem;
-  font-weight: 560;
-  line-height: 1.12;
-  letter-spacing: 0.01em;
-  text-align: right;
-  color: var(--text-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.quiet-signal-line {
-  margin: 0;
-  white-space: nowrap;
-}
-
-.quiet-fireworks {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 45;
 }
 
 .nav-shell {
@@ -640,7 +605,7 @@ h3 {
 .hero-shot {
   margin: 0;
   width: min(100%, 17rem);
-  justify-self: end;
+  justify-self: center;
   height: auto;
   filter: drop-shadow(0 34px 62px rgba(0, 0, 0, 0.45));
 }
@@ -1098,6 +1063,7 @@ body.is-hero-ready .hero-headline {
 
   .hero-shot {
     width: min(100%, 18rem);
+    justify-self: end;
   }
 
   .showcase-shot {
@@ -1135,14 +1101,6 @@ body.is-hero-ready .hero-headline {
 }
 
 @media (max-width: 739px) {
-  .quiet-signal {
-    top: calc(4.95rem + env(safe-area-inset-top, 0px));
-    right: calc(0.72rem + env(safe-area-inset-right, 0px));
-    min-width: 7.95rem;
-    padding: 0.38rem 0.56rem;
-    font-size: 0.69rem;
-  }
-
   .brand img {
     width: 122px;
   }

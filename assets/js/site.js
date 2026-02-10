@@ -8,166 +8,11 @@
   const planButtons = Array.from(document.querySelectorAll('.plan-day'));
   const planDetail = document.querySelector('[data-plan-detail]');
   const planList = document.querySelector('.plan-list');
-  const quietSignal = document.querySelector('[data-quiet-signal]');
-  const loadCurrent = document.querySelector('[data-load-current]');
-  const volumeCurrent = document.querySelector('[data-volume-current]');
-  const fireworksCanvas = document.querySelector('[data-quiet-fireworks]');
   const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const quietTargetLoad = 490;
-  const quietTargetVolumeSeconds = 585;
-
-  let quietLastLoad = -1;
-  let quietLastVolume = -1;
-  let quietTicking = false;
-  let quietWasAtBottom = false;
-  let fireworksContext = null;
-  let fireworksParticles = [];
-  let fireworksFrame = 0;
 
   const setHeaderState = () => {
     if (!header) return;
     header.classList.toggle('is-scrolled', window.scrollY > 8);
-  };
-
-  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-
-  const getScrollProgress = () => {
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    if (maxScroll <= 0) return 1;
-    return clamp(window.scrollY / maxScroll, 0, 1);
-  };
-
-  const formatVolume = (totalSeconds) => {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}:${String(seconds).padStart(2, '0')}h`;
-  };
-
-  const resizeFireworksCanvas = () => {
-    if (!fireworksCanvas) return;
-    const scale = Math.min(window.devicePixelRatio || 1, 2);
-    const width = Math.floor(window.innerWidth * scale);
-    const height = Math.floor(window.innerHeight * scale);
-
-    if (fireworksCanvas.width !== width || fireworksCanvas.height !== height) {
-      fireworksCanvas.width = width;
-      fireworksCanvas.height = height;
-    }
-
-    if (!fireworksContext) {
-      fireworksContext = fireworksCanvas.getContext('2d');
-    }
-
-    if (fireworksContext) {
-      fireworksContext.setTransform(scale, 0, 0, scale, 0, 0);
-    }
-  };
-
-  const animateFireworks = () => {
-    if (!fireworksContext) return;
-
-    fireworksContext.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    fireworksContext.globalCompositeOperation = 'lighter';
-
-    let liveCount = 0;
-
-    fireworksParticles.forEach((particle) => {
-      particle.life -= 16.67;
-      if (particle.life <= 0) return;
-
-      liveCount += 1;
-      particle.vx *= 0.985;
-      particle.vy = particle.vy * 0.986 + 0.015;
-      particle.x += particle.vx;
-      particle.y += particle.vy;
-
-      const alpha = (particle.life / particle.maxLife) * 0.48;
-      fireworksContext.beginPath();
-      fireworksContext.fillStyle = `rgba(${particle.color[0]}, ${particle.color[1]}, ${particle.color[2]}, ${alpha.toFixed(3)})`;
-      fireworksContext.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-      fireworksContext.fill();
-    });
-
-    fireworksContext.globalCompositeOperation = 'source-over';
-
-    if (liveCount > 0) {
-      fireworksFrame = window.requestAnimationFrame(animateFireworks);
-      return;
-    }
-
-    fireworksParticles = [];
-    fireworksContext.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    fireworksFrame = 0;
-  };
-
-  const triggerQuietFireworks = () => {
-    if (!fireworksCanvas || reducedMotionQuery.matches) return;
-
-    resizeFireworksCanvas();
-    if (!fireworksContext) return;
-
-    const signalRect = quietSignal instanceof HTMLElement ? quietSignal.getBoundingClientRect() : null;
-    const originX = signalRect ? signalRect.left + signalRect.width * 0.76 : window.innerWidth - 60;
-    const originY = signalRect ? signalRect.top + signalRect.height * 0.56 : (header ? header.offsetHeight + 24 : 68);
-    const particleCount = 16;
-
-    fireworksParticles = Array.from({ length: particleCount }, (_, index) => {
-      const baseAngle = (Math.PI * 2 * index) / particleCount;
-      const angle = baseAngle + (Math.random() - 0.5) * 0.28;
-      const speed = 0.55 + Math.random() * 1.15;
-      const useAccent = Math.random() > 0.72;
-
-      return {
-        x: originX,
-        y: originY,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - 0.2,
-        radius: 0.9 + Math.random() * 1.6,
-        life: 420 + Math.random() * 240,
-        maxLife: 420 + Math.random() * 240,
-        color: useAccent ? [194, 64, 31] : [246, 248, 255]
-      };
-    });
-
-    if (fireworksFrame) {
-      window.cancelAnimationFrame(fireworksFrame);
-    }
-
-    fireworksFrame = window.requestAnimationFrame(animateFireworks);
-  };
-
-  const updateQuietSignal = () => {
-    if (!(loadCurrent instanceof HTMLElement) || !(volumeCurrent instanceof HTMLElement)) return;
-
-    const progress = getScrollProgress();
-    const load = Math.round(progress * quietTargetLoad);
-    const volumeSeconds = Math.round(progress * quietTargetVolumeSeconds);
-
-    if (load !== quietLastLoad) {
-      loadCurrent.textContent = String(load);
-      quietLastLoad = load;
-    }
-
-    if (volumeSeconds !== quietLastVolume) {
-      volumeCurrent.textContent = formatVolume(volumeSeconds);
-      quietLastVolume = volumeSeconds;
-    }
-
-    const atBottom = progress >= 0.9995;
-    if (atBottom && !quietWasAtBottom) {
-      triggerQuietFireworks();
-    }
-    quietWasAtBottom = atBottom;
-  };
-
-  const queueQuietSignalUpdate = () => {
-    if (quietTicking) return;
-    quietTicking = true;
-
-    window.requestAnimationFrame(() => {
-      quietTicking = false;
-      updateQuietSignal();
-    });
   };
 
   const closeMenu = () => {
@@ -332,16 +177,6 @@
   const year = document.querySelector('#year');
   if (year) {
     year.textContent = String(new Date().getFullYear());
-  }
-
-  if (quietSignal && loadCurrent && volumeCurrent) {
-    resizeFireworksCanvas();
-    updateQuietSignal();
-    window.addEventListener('scroll', queueQuietSignalUpdate, { passive: true });
-    window.addEventListener('resize', () => {
-      resizeFireworksCanvas();
-      queueQuietSignalUpdate();
-    });
   }
 
   setHeaderState();
