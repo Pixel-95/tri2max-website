@@ -29,6 +29,7 @@ html {
   scroll-behavior: smooth;
   overflow-x: hidden;
   max-width: 100%;
+  overscroll-behavior-x: none;
 }
 
 body {
@@ -36,6 +37,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   max-width: 100%;
+  overscroll-behavior-x: none;
   font-family: var(--font-sans);
   color: var(--text);
   background: radial-gradient(960px 560px at 88% -10%, rgba(194, 64, 31, 0.07), transparent 66%), linear-gradient(180deg, #0b0d11, #06070a 54%, #040508);
@@ -1072,6 +1074,16 @@ body.is-hero-ready .hero-headline {
 }
 
 @media (max-width: 899px) {
+  html,
+  body {
+    overflow-x: hidden !important;
+    overscroll-behavior-x: none;
+  }
+
+  body {
+    touch-action: pan-y;
+  }
+
   .hero-step,
   .hero-headline,
   .reveal,
@@ -1098,7 +1110,9 @@ body.is-hero-ready .hero-headline {
   }
 
   .hero-orb {
-    opacity: 0.5;
+    right: -2rem;
+    width: 44vw;
+    opacity: 0.42;
   }
 
 }
