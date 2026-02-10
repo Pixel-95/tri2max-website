@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/site.css?v=20260210-5">
+  <link rel="stylesheet" href="assets/css/site.css?v=20260210-6">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -347,10 +347,11 @@
           <p class="eyebrow">Early Access</p>
           <h2 class="reveal-heading" id="waitlist-title">Join the triathlon app waitlist.</h2>
           <p>Be first to experience a personalized triathlon training app with adaptive planning and coach-built logic.</p>
-          <form class="waitlist-form" action="https://formsubmit.co/tri2maxapp@gmail.com" method="post" novalidate data-endpoint="https://formsubmit.co/ajax/tri2maxapp@gmail.com">
-            <input type="hidden" name="_subject" value="tri2max waitlist signup">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_template" value="table">
+          <form class="waitlist-form" action="https://api.web3forms.com/submit" method="post" novalidate data-endpoint="https://api.web3forms.com/submit" data-access-key="e1f1df5c-839a-4486-977e-29999f1a731b">
+            <input type="hidden" name="access_key" value="e1f1df5c-839a-4486-977e-29999f1a731b">
+            <input type="hidden" name="subject" value="tri2max waitlist signup">
+            <input type="hidden" name="from_name" value="tri2max.app waitlist">
+            <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
             <label for="email" class="visually-hidden">Email address</label>
             <input type="email" id="email" name="email" placeholder="you@domain.com" autocomplete="email" required aria-required="true">
             <button type="submit" class="btn btn-primary">Request invite</button>
@@ -380,6 +381,6 @@
     </div>
   </footer>
 
-  <script src="assets/js/site.js?v=20260210-5" defer></script>
+  <script src="assets/js/site.js?v=20260210-6" defer></script>
 </body>
 </html>

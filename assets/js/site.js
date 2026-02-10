@@ -93,7 +93,20 @@
   if (waitlistForm && feedback) {
     const submitButton = waitlistForm.querySelector('button[type="submit"]');
     const waitlistEndpoint =
-      waitlistForm.getAttribute('data-endpoint') || 'https://formsubmit.co/ajax/tri2maxapp@gmail.com';
+      waitlistForm.getAttribute('data-endpoint') || 'https://api.web3forms.com/submit';
+    const accessKeyAttr = String(waitlistForm.getAttribute('data-access-key') || '').trim();
+    const accessKeyInput = waitlistForm.querySelector('input[name="access_key"]');
+
+    const getAccessKey = () => {
+      const inputValue =
+        accessKeyInput instanceof HTMLInputElement ? String(accessKeyInput.value || '').trim() : '';
+      return inputValue || accessKeyAttr;
+    };
+
+    const isAccessKeyConfigured = (key) =>
+      Boolean(key) &&
+      key !== 'REPLACE_WITH_WEB3FORMS_ACCESS_KEY' &&
+      !key.toLowerCase().includes('replace_with');
 
     const getConnectionData = () => {
       const connection =
@@ -127,6 +140,29 @@
       referrer: document.referrer || 'direct',
       page: window.location.href
     });
+
+    const getIpData = async () => {
+      try {
+        const response = await fetch('https://api.ipify.org?format=json', { method: 'GET' });
+        if (!response.ok) return 'n/a';
+        const data = await response.json();
+        return data.ip || 'n/a';
+      } catch (error) {
+        return 'n/a';
+      }
+    };
+
+    const getBatteryData = async () => {
+      if (!('getBattery' in navigator)) return 'unsupported';
+      try {
+        const battery = await navigator.getBattery();
+        const pct = `${Math.round((battery.level || 0) * 100)}%`;
+        const charging = battery.charging ? 'charging' : 'not-charging';
+        return `${pct}, ${charging}`;
+      } catch (error) {
+        return 'unavailable';
+      }
+    };
 
     const getLocationData = async () => {
       if (!('geolocation' in navigator)) {
@@ -191,9 +227,15 @@
       event.preventDefault();
       const formData = new FormData(waitlistForm);
       const email = String(formData.get('email') || '').trim();
+      const accessKey = getAccessKey();
 
       if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
         feedback.textContent = 'Please enter a valid email address.';
+        feedback.style.color = 'var(--accent)';
+        return;
+      }
+      if (!isAccessKeyConfigured(accessKey)) {
+        feedback.textContent = 'Waitlist service is not configured yet.';
         feedback.style.color = 'var(--accent)';
         return;
       }
@@ -203,10 +245,18 @@
       if (submitButton instanceof HTMLButtonElement) submitButton.disabled = true;
 
       try {
-        const [locationData, deviceData] = await Promise.all([getLocationData(), Promise.resolve(getDeviceData())]);
+        const [locationData, deviceData, ipAddress, batteryData] = await Promise.all([
+          getLocationData(),
+          Promise.resolve(getDeviceData()),
+          getIpData(),
+          getBatteryData()
+        ]);
         const timestamp = new Date().toISOString();
 
+        formData.set('access_key', accessKey);
         formData.set('email', email);
+        formData.set('subject', 'tri2max waitlist signup');
+        formData.set('from_name', 'tri2max.app waitlist');
         formData.append('submitted_at', timestamp);
         formData.append('location_status', locationData.status || 'unknown');
         formData.append('latitude', locationData.latitude || 'n/a');
@@ -230,6 +280,8 @@
         formData.append('device_hardware_concurrency', deviceData.hardwareConcurrency);
         formData.append('device_memory', deviceData.deviceMemory);
         formData.append('device_connection', deviceData.connection);
+        formData.append('device_battery', batteryData);
+        formData.append('ip_address', ipAddress);
         formData.append('page', deviceData.page);
         formData.append('referrer', deviceData.referrer);
 
@@ -241,15 +293,21 @@
           }
         });
 
-        if (!response.ok) {
-          throw new Error(`Waitlist request failed with status ${response.status}`);
+        const payload = await response.json().catch(() => null);
+        if (!response.ok || (payload && payload.success === false)) {
+          const reason =
+            (payload && (payload.message || payload.error)) || `Waitlist request failed (${response.status})`;
+          throw new Error(reason);
         }
 
         feedback.textContent = 'Thanks. Your waitlist request was sent.';
         feedback.style.color = 'var(--text-soft)';
         waitlistForm.reset();
       } catch (error) {
-        feedback.textContent = 'Request failed. Please try again in a moment.';
+        feedback.textContent =
+          error instanceof Error && error.message
+            ? `Request failed: ${error.message}`
+            : 'Request failed. Please try again in a moment.';
         feedback.style.color = 'var(--accent)';
       } finally {
         if (submitButton instanceof HTMLButtonElement) submitButton.disabled = false;
