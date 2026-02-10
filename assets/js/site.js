@@ -4,9 +4,10 @@
   const primaryNav = document.querySelector('#primary-nav');
   const feedback = document.querySelector('.form-feedback');
   const waitlistForm = document.querySelector('.waitlist-form');
-  const heroSteps = document.querySelectorAll('.hero-step');
+  const heroSteps = document.querySelectorAll('.hero-step, .hero-headline');
   const planButtons = Array.from(document.querySelectorAll('.plan-day'));
   const planDetail = document.querySelector('[data-plan-detail]');
+  const planList = document.querySelector('.plan-list');
 
   const setHeaderState = () => {
     if (!header) return;
@@ -17,6 +18,7 @@
     if (!primaryNav || !navToggle) return;
     primaryNav.classList.remove('is-open');
     navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.classList.remove('is-open');
   };
 
   if (navToggle && primaryNav) {
@@ -24,6 +26,7 @@
       const expanded = navToggle.getAttribute('aria-expanded') === 'true';
       navToggle.setAttribute('aria-expanded', String(!expanded));
       primaryNav.classList.toggle('is-open', !expanded);
+      navToggle.classList.toggle('is-open', !expanded);
     });
 
     document.addEventListener('click', (event) => {
@@ -125,7 +128,15 @@
     const detailTitle = planDetail.querySelector('.plan-detail-title');
     const detailMeta = planDetail.querySelector('.plan-detail-meta');
     const detailCopy = planDetail.querySelector('.plan-detail-copy');
-    const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const allowPlanInteraction = window.matchMedia('(min-width: 900px) and (hover: hover) and (pointer: fine)').matches;
+
+    if (!allowPlanInteraction) {
+      if (planList) planList.classList.add('is-static');
+      planButtons.forEach((button, index) => {
+        button.setAttribute('aria-disabled', 'true');
+        if (index > 0) button.setAttribute('tabindex', '-1');
+      });
+    }
 
     const setActiveDay = (button) => {
       if (!(button instanceof HTMLButtonElement)) return;
@@ -149,19 +160,18 @@
       }, 130);
     };
 
-    planButtons.forEach((button) => {
-      button.addEventListener('click', () => setActiveDay(button));
-
-      if (hasFinePointer) {
+    if (allowPlanInteraction) {
+      planButtons.forEach((button) => {
+        button.addEventListener('click', () => setActiveDay(button));
         button.addEventListener('mouseenter', () => setActiveDay(button));
-      }
 
-      button.addEventListener('keydown', (event) => {
-        if (event.key !== 'Enter' && event.key !== ' ') return;
-        event.preventDefault();
-        setActiveDay(button);
+        button.addEventListener('keydown', (event) => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          setActiveDay(button);
+        });
       });
-    });
+    }
   }
 
   const year = document.querySelector('#year');
