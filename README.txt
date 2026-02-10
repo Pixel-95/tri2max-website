@@ -9,12 +9,11 @@ Brand direction
 
 Project structure
 - index.html: Primary conversion landing page
-- generic.html: Supporting overview page
-- elements.html: Early access information page
 - assets/css/site.css: Shared design system and section styles
 - assets/js/site.js: Navigation, smooth scrolling, reveal animations, waitlist UX
-- images/tri2max_logo_black.png: Primary logo on light backgrounds
 - images/tri2max_logo_white.png: Alternate logo for dark backgrounds
+- images/screenshot.png: Product screenshot used in the preview section
+- images/logo_cloud.svg: Lightweight showcase visual
 
 Design and implementation notes
 - Mobile-first layout with desktop refinements
@@ -22,6 +21,7 @@ Design and implementation notes
 - Semantic HTML sections for accessibility and maintainability
 - Lightweight animation approach (IntersectionObserver + CSS transitions)
 - No frontend framework required
+- Performance-focused asset set with removed legacy template files
 
 Local development
 1. Open `index.html` directly in a browser, or
