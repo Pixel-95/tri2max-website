@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/site.css">
-  <noscript><style>.reveal,.reveal .reveal-heading{opacity:1!important;transform:none!important;filter:none!important}</style></noscript>
+  <noscript><style>.reveal,.reveal .reveal-heading,.hero-step{opacity:1!important;transform:none!important;filter:none!important}</style></noscript>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -40,65 +40,97 @@
     <section class="hero section" id="hero">
       <div class="hero-orb" aria-hidden="true"></div>
       <div class="container hero-grid">
-        <div class="hero-copy reveal" data-delay="0">
-          <p class="eyebrow">Human-crafted, AI-supported</p>
-          <h1 class="reveal-heading">Training that adapts to your life.</h1>
-          <p class="lead">tri2max combines elite coaching logic with intelligent automation so endurance athletes can improve consistently without letting training take over their schedule.</p>
+        <div class="hero-copy">
+          <p class="eyebrow hero-step" data-hero-delay="20">Human-crafted, AI-supported</p>
+          <h1 class="reveal-heading hero-step" data-hero-delay="90">Training that adapts to your life.</h1>
+          <p class="lead hero-step" data-hero-delay="170">tri2max combines elite coaching logic with intelligent automation so endurance athletes can improve consistently without letting training take over their schedule.</p>
 
-          <div class="hero-actions">
+          <div class="hero-actions hero-step" data-hero-delay="250">
             <a class="btn btn-primary" href="#waitlist">Join early access</a>
             <a class="btn btn-ghost" href="#solution">See how it works</a>
           </div>
 
-          <ul class="hero-points" aria-label="tri2max highlights">
-            <li>Triathlon, running, HYROX, and cycling support</li>
+          <ul class="hero-points hero-step" data-hero-delay="330" aria-label="tri2max highlights">
+            <li>Built exclusively for triathletes chasing sustainable peak performance</li>
             <li>Adaptive planning when work, family, or travel changes</li>
             <li>Performance gains without avoidable overload</li>
           </ul>
         </div>
 
-        <aside class="hero-panel reveal" data-delay="120" aria-label="Adaptive week preview">
-          <p class="panel-label">Adaptive Week Snapshot</p>
-          <h2 class="reveal-heading">Built by coaches.<br>Balanced by AI.</h2>
-          <ul class="panel-list">
-            <li>
-              <span>Mon</span>
-              <strong>Swim Aerobic Short +<br>Run VO2max Intervals</strong>
-              <em>Load 75</em>
-            </li>
-            <li>
-              <span>Tue</span>
-              <strong>Bike Threshold Intervals</strong>
-              <em>Load 64</em>
-            </li>
-            <li>
-              <span>Wed</span>
-              <strong>Run Long Endurance +<br>Mobility Training</strong>
-              <em>Load 91</em>
-            </li>
-            <li>
-              <span>Thu</span>
-              <strong>Swim VO2max</strong>
-              <em>Load 42</em>
-            </li>
-            <li>
-              <span>Fri</span>
-              <strong>Rest Day</strong>
-              <em>Load 0</em>
-            </li>
-            <li>
-              <span>Sat</span>
-              <strong>Bike Basic Endurance +<br>Run off Bike</strong>
-              <em>Load 84</em>
-            </li>
-            <li>
-              <span>Sun</span>
-              <strong>Long Bike</strong>
-              <em>Load 134</em>
-            </li>
-          </ul>
-          <p class="panel-note">Live load control helps keep progress high and injury risk lower.</p>
-        </aside>
+        <div class="hero-visual">
+          <aside class="hero-panel hero-step" data-hero-delay="310" aria-label="Adaptive week preview">
+            <p class="panel-label">Adaptive Week Snapshot</p>
+            <h2 class="reveal-heading">Built by coaches.<br>Balanced by AI.</h2>
+            <ul class="plan-list" aria-label="Training plan by day">
+              <li>
+                <button type="button" class="plan-day is-selected" data-day="mon" data-label="Monday" data-title="Swim Aerobic Short + Run VO2max Intervals" data-meta="Load 75 - 70 min - RPE 7" data-copy="High-quality interval focus with controlled recovery to build aerobic power without excess fatigue." aria-selected="true">
+                  <span class="plan-day-code">Mon</span>
+                  <span class="plan-icon"><img src="images/icon_swim.png" alt="" loading="lazy"></span>
+                  <span class="plan-workout">Swim + Run Intervals</span>
+                  <span class="plan-load">75</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="plan-day" data-day="tue" data-label="Tuesday" data-title="Bike Threshold Intervals" data-meta="Load 64 - 55 min - RPE 6" data-copy="Progressive bike sets tuned to your current readiness, keeping threshold work productive and sustainable." aria-selected="false">
+                  <span class="plan-day-code">Tue</span>
+                  <span class="plan-icon"><img src="images/icon_bike.png" alt="" loading="lazy"></span>
+                  <span class="plan-workout">Bike Threshold</span>
+                  <span class="plan-load">64</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="plan-day" data-day="wed" data-label="Wednesday" data-title="Run Long Endurance + Mobility Training" data-meta="Load 91 - 85 min - RPE 7" data-copy="Long aerobic work plus mobility keeps mechanics clean while building repeatable durability for race-specific blocks." aria-selected="false">
+                  <span class="plan-day-code">Wed</span>
+                  <span class="plan-icon"><img src="images/icon_run.png" alt="" loading="lazy"></span>
+                  <span class="plan-workout">Long Run + Mobility</span>
+                  <span class="plan-load">91</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="plan-day" data-day="thu" data-label="Thursday" data-title="Swim VO2max" data-meta="Load 42 - 45 min - RPE 5" data-copy="Short, high-quality swim blocks sharpen top-end speed while preserving freshness for the weekend volume focus." aria-selected="false">
+                  <span class="plan-day-code">Thu</span>
+                  <span class="plan-icon"><img src="images/icon_swim.png" alt="" loading="lazy"></span>
+                  <span class="plan-workout">Swim VO2max</span>
+                  <span class="plan-load">42</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="plan-day" data-day="fri" data-label="Friday" data-title="Rest + Mobility Reset" data-meta="Load 0 - 20 min optional - RPE 1" data-copy="Low-load day to absorb the week. Optional mobility sequence is provided if stiffness markers are elevated." aria-selected="false">
+                  <span class="plan-day-code">Fri</span>
+                  <span class="plan-icon"><img src="images/icon_rest.png" alt="" loading="lazy"></span>
+                  <span class="plan-workout">Rest + Reset</span>
+                  <span class="plan-load">0</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="plan-day" data-day="sat" data-label="Saturday" data-title="Bike Endurance + Run off Bike" data-meta="Load 84 - 95 min - RPE 7" data-copy="Brick-specific session reinforces race transfer while keeping cadence and fueling targets aligned with your current phase." aria-selected="false">
+                  <span class="plan-day-code">Sat</span>
+                  <span class="plan-icon"><img src="images/icon_bike.png" alt="" loading="lazy"></span>
+                  <span class="plan-workout">Bike + Run Brick</span>
+                  <span class="plan-load">84</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="plan-day" data-day="sun" data-label="Sunday" data-title="Long Bike + Recovery Mobility" data-meta="Load 134 - 130 min - RPE 8" data-copy="Longest aerobic day of the week with post-session mobility guidance to support recovery and keep load progression stable." aria-selected="false">
+                  <span class="plan-day-code">Sun</span>
+                  <span class="plan-icon"><img src="images/icon_mobility.png" alt="" loading="lazy"></span>
+                  <span class="plan-workout">Long Bike + Mobility</span>
+                  <span class="plan-load">134</span>
+                </button>
+              </li>
+            </ul>
+            <article class="plan-detail" data-plan-detail aria-live="polite">
+              <p class="plan-detail-day">Monday</p>
+              <h3 class="plan-detail-title">Swim Aerobic Short + Run VO2max Intervals</h3>
+              <p class="plan-detail-meta">Load 75 - 70 min - RPE 7</p>
+              <p class="plan-detail-copy">High-quality interval focus with controlled recovery to build aerobic power without excess fatigue.</p>
+            </article>
+            <p class="panel-note">Live load control helps keep progress high and injury risk lower.</p>
+          </aside>
+          <figure class="hero-shot hero-step" data-hero-delay="420">
+            <img src="images/screenshot.png" alt="tri2max mobile app screenshot showing adaptive training week" loading="eager" decoding="async">
+          </figure>
+        </div>
       </div>
     </section>
 
@@ -150,13 +182,56 @@
 
     <section class="section section-showcase" aria-label="Platform screenshots">
       <div class="container">
-        <div class="screenshot-grid">
-          <figure class="screenshot-card reveal" data-delay="40">
-            <img src="images/pic01.jpg" alt="tri2max training dashboard preview" loading="lazy">
+        <div class="showcase-shell">
+          <div class="visual-column reveal" data-delay="40">
+            <article class="visual-chip">
+              <img src="images/icon_swim.png" alt="" loading="lazy">
+              <div>
+                <h3>Session Quality</h3>
+                <p>Execution score and drift analysis</p>
+              </div>
+            </article>
+            <article class="visual-chip">
+              <img src="images/icon_run.png" alt="" loading="lazy">
+              <div>
+                <h3>Readiness Inputs</h3>
+                <p>Fatigue, sleep, and recovery markers</p>
+              </div>
+            </article>
+            <article class="visual-chip">
+              <img src="images/icon_rest.png" alt="" loading="lazy">
+              <div>
+                <h3>Risk Guardrails</h3>
+                <p>Automatic overload prevention cues</p>
+              </div>
+            </article>
+          </div>
+          <figure class="screenshot-card screenshot-card-main reveal" data-delay="90">
+            <img src="images/screenshot.png" alt="tri2max mobile product screenshot in framed preview" loading="lazy">
           </figure>
-          <figure class="screenshot-card reveal" data-delay="120">
-            <img src="images/pic02.jpg" alt="tri2max analytics preview" loading="lazy">
-          </figure>
+          <div class="visual-column reveal" data-delay="140">
+            <article class="visual-chip">
+              <img src="images/icon_bike.png" alt="" loading="lazy">
+              <div>
+                <h3>Weekly Load Map</h3>
+                <p>Balanced stress distribution by day</p>
+              </div>
+            </article>
+            <article class="visual-chip">
+              <img src="images/icon_mobility.png" alt="" loading="lazy">
+              <div>
+                <h3>Mobility Layer</h3>
+                <p>Movement reset integrated in the plan</p>
+              </div>
+            </article>
+            <article class="visual-chip">
+              <img src="images/icon_swim.png" alt="" loading="lazy">
+              <div>
+                <h3>Coach Logic</h3>
+                <p>Human progression model at the core</p>
+              </div>
+            </article>
+          </div>
         </div>
       </div>
     </section>
