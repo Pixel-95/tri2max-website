@@ -28,12 +28,14 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
   overflow-x: hidden;
+  max-width: 100%;
   font-family: var(--font-sans);
   color: var(--text);
   background:
@@ -297,7 +299,7 @@ a {
 }
 
 .hero {
-  overflow: clip;
+  overflow: hidden;
   padding-top: clamp(4.1rem, 10vw, 8.1rem);
 }
 
@@ -559,7 +561,7 @@ h3 {
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.02);
   padding: 0.95rem 0.95rem 0.9rem;
-  height: 10.5rem;
+  height: 11rem;
   overflow: hidden;
   display: grid;
   align-content: start;
@@ -618,7 +620,7 @@ h3 {
 
 .hero-orb {
   position: absolute;
-  right: -10.5rem;
+  right: -6rem;
   top: -0.4rem;
   width: min(60vw, 42rem);
   aspect-ratio: 1;
@@ -629,6 +631,12 @@ h3 {
   filter: blur(2px);
   z-index: -1;
   animation: floatOrb 16s ease-in-out infinite;
+}
+
+main {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 @keyframes floatOrb {
