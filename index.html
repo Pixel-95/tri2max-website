@@ -56,6 +56,7 @@
         <a href="#problem">Problem</a>
         <a href="#solution">Solution</a>
         <a href="#philosophy">Philosophy</a>
+        <a href="#race-predictor">Race Predictor</a>
         <a class="btn btn-nav" href="#waitlist">Join early access</a>
       </nav>
     </div>
@@ -338,6 +339,182 @@
             <h3>Performance with life balance</h3>
             <p>Winning outcomes come from plans athletes can sustain in real conditions.</p>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-muted predictor-section" id="race-predictor" aria-labelledby="race-predictor-title">
+      <div class="container">
+        <div class="section-head reveal" data-delay="0">
+          <p class="eyebrow">Race Predictor</p>
+          <h2 class="reveal-heading" id="race-predictor-title">Estimate your next triathlon split by split.</h2>
+          <p class="lead-sm">Use your current thresholds, course profile, and race conditions to project swim, bike, run, transitions, and total race time with one focused calculator.</p>
+        </div>
+
+        <div class="predictor-shell reveal" data-delay="90">
+          <form class="predictor-form" novalidate data-race-predictor-form>
+            <div class="predictor-form-grid">
+              <fieldset class="predictor-group predictor-group-swim">
+                <legend>Swim</legend>
+                <div class="predictor-fields">
+                  <label class="predictor-field">
+                    <span>Swim distance in m</span>
+                    <input type="number" name="swimDistanceM" min="1" step="50" value="1900" inputmode="decimal" required>
+                  </label>
+                  <label class="predictor-field">
+                    <span>Swim threshold pace in mm:ss/100m</span>
+                    <input type="text" name="swimThresholdPace" value="1:40" inputmode="text" autocomplete="off" placeholder="1:40" required>
+                  </label>
+                  <label class="predictor-field predictor-switch-field">
+                    <span>Open water</span>
+                    <span class="predictor-switch">
+                      <input type="checkbox" name="swimIsOpenWater" checked>
+                      <span class="predictor-switch-ui" aria-hidden="true"></span>
+                    </span>
+                  </label>
+                  <label class="predictor-field predictor-switch-field">
+                    <span>Wetsuit</span>
+                    <span class="predictor-switch">
+                      <input type="checkbox" name="swimUseWetsuit" checked>
+                      <span class="predictor-switch-ui" aria-hidden="true"></span>
+                    </span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset class="predictor-group predictor-group-bike">
+                <legend>Bike</legend>
+                <div class="predictor-fields">
+                  <label class="predictor-field">
+                    <span>Bike distance in km</span>
+                    <input type="number" name="bikeDistanceKm" min="0.1" step="0.1" value="90" inputmode="decimal" required>
+                  </label>
+                  <label class="predictor-field">
+                    <span>Bike threshold power in W</span>
+                    <input type="number" name="bikeThresholdPowerW" min="1" step="1" value="300" inputmode="decimal" required>
+                  </label>
+                  <label class="predictor-field">
+                    <span>Body weight in kg</span>
+                    <input type="number" name="weightPersonKg" min="1" step="0.1" value="80" inputmode="decimal" required>
+                  </label>
+                  <label class="predictor-field">
+                    <span>Bike weight in kg</span>
+                    <input type="number" name="weightBikeKg" min="0.1" step="0.1" value="8" inputmode="decimal" required>
+                  </label>
+                  <div class="predictor-field predictor-choice-field">
+                    <span>Bike position</span>
+                    <div class="predictor-choice-grid predictor-choice-grid-3" role="radiogroup" aria-label="Bike position">
+                      <label class="predictor-choice">
+                        <input type="radio" name="bikePosition" value="tt" checked>
+                        <span>TT</span>
+                      </label>
+                      <label class="predictor-choice">
+                        <input type="radio" name="bikePosition" value="road">
+                        <span>Road</span>
+                      </label>
+                      <label class="predictor-choice">
+                        <input type="radio" name="bikePosition" value="upright">
+                        <span>Upright</span>
+                      </label>
+                    </div>
+                  </div>
+                  <label class="predictor-field">
+                    <span>Bike elevation gain in m</span>
+                    <input type="number" name="bikeElevationGainM" min="0" step="10" value="0" inputmode="decimal" required>
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset class="predictor-group predictor-group-run">
+                <legend>Run</legend>
+                <div class="predictor-fields">
+                  <label class="predictor-field">
+                    <span>Run distance in km</span>
+                    <input type="number" name="runDistanceKm" min="0.1" step="0.1" value="21.1" inputmode="decimal" required>
+                  </label>
+                  <label class="predictor-field">
+                    <span>Run threshold pace in mm:ss/km</span>
+                    <input type="text" name="runThresholdPace" value="3:50" inputmode="text" autocomplete="off" placeholder="3:50" required>
+                  </label>
+                  <label class="predictor-field">
+                    <span>Run elevation gain in m</span>
+                    <input type="number" name="runElevationGainM" min="0" step="10" value="0" inputmode="decimal" required>
+                  </label>
+                  <label class="predictor-field predictor-field-air-temp">
+                    <span>Air temperature in °C</span>
+                    <input type="number" name="airTemperatureC" step="0.5" value="20" inputmode="decimal" required>
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset class="predictor-group predictor-group-t1">
+                <legend>T1</legend>
+                <div class="predictor-fields">
+                  <label class="predictor-field">
+                    <span>T1 time in min</span>
+                    <input type="text" name="t1Time" value="4:00" inputmode="text" autocomplete="off" placeholder="4:00" required>
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset class="predictor-group predictor-group-t2">
+                <legend>T2</legend>
+                <div class="predictor-fields">
+                  <label class="predictor-field">
+                    <span>T2 time in min</span>
+                    <input type="text" name="t2Time" value="2:00" inputmode="text" autocomplete="off" placeholder="2:00" required>
+                  </label>
+                </div>
+              </fieldset>
+            </div>
+
+            <div class="predictor-actions">
+              <p class="predictor-feedback" data-race-predictor-feedback aria-live="polite"></p>
+            </div>
+          </form>
+
+          <aside class="predictor-results" data-race-predictor-results aria-live="polite">
+            <div class="predictor-results-head">
+              <p class="eyebrow">Prediction</p>
+              <h3>Projected race splits</h3>
+            </div>
+
+            <div class="predictor-result-grid">
+              <article class="predictor-result-card predictor-result-card-total predictor-result-card-compact">
+                <p class="predictor-result-label">Total</p>
+                <p class="predictor-result-value" data-predictor-value="total">0:00</p>
+              </article>
+
+              <article class="predictor-result-card">
+                <p class="predictor-result-label">Swim</p>
+                <p class="predictor-result-value" data-predictor-value="swim">0:00</p>
+                <p class="predictor-result-meta" data-predictor-metric="swimPace">0:00/100m</p>
+              </article>
+
+              <article class="predictor-result-card predictor-result-card-compact">
+                <p class="predictor-result-label">T1</p>
+                <p class="predictor-result-value" data-predictor-value="t1">0:00</p>
+              </article>
+
+              <article class="predictor-result-card">
+                <p class="predictor-result-label">Bike</p>
+                <p class="predictor-result-value" data-predictor-value="bike">0:00</p>
+                <p class="predictor-result-meta" data-predictor-metric="bikeSpeed">0.0 km/h</p>
+              </article>
+
+              <article class="predictor-result-card predictor-result-card-compact">
+                <p class="predictor-result-label">T2</p>
+                <p class="predictor-result-value" data-predictor-value="t2">0:00</p>
+              </article>
+
+              <article class="predictor-result-card">
+                <p class="predictor-result-label">Run</p>
+                <p class="predictor-result-value" data-predictor-value="run">0:00</p>
+                <p class="predictor-result-meta" data-predictor-metric="runPace">0:00/km</p>
+              </article>
+            </div>
+
+          </aside>
         </div>
       </div>
     </section>
