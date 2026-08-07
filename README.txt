@@ -10,7 +10,7 @@ Brand direction
 Project structure
 - index.html: Primary conversion landing page
 - site.css: Shared design system and section styles
-- site.js: Navigation, smooth scrolling, reveal animations, waitlist UX
+- site.js: Navigation, smooth scrolling, reveal animations, race predictor
 - assets/icons/brand/tri2max_logo_white.png: Alternate logo for dark backgrounds
 - assets/images/screenshot.png: Product screenshot used in the preview section
 - assets/icons/brand/logo_cloud.png: Lightweight showcase visual
